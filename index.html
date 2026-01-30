@@ -8,9 +8,9 @@
   analytics.load("VfIPbVefSty5x51xC032HEebeP4B28tq");
   analytics.ready(function(){
     // Get the current user object
-    var user = analytics.user();
+    //var user = analytics.user();
     // Get the existing ajs_anonymous_id
-    var currentId = user.anonymousId();
+    var currentId = analytics.user().anonymousId();
     // Check if it already has the prefix to avoid "cons_cons_..."
     if (currentId && !currentId.startsWith('cons_')){
       // Set the new ID with the prefix
