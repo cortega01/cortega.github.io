@@ -6,21 +6,26 @@
 <script>
   !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"];analytics.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);t.unshift(e);analytics.push(t);return analytics}};for(var e=0;e<analytics.methods.length;e++){var key=analytics.methods[e];analytics[key]=analytics.factory(key)}analytics.load=function(key,e){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.src="https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(t,n);analytics._loadOptions=e};analytics._writeKey="VfIPbVefSty5x51xC032HEebeP4B28tq";;analytics.SNIPPET_VERSION="4.15.3";
   analytics.load("VfIPbVefSty5x51xC032HEebeP4B28tq");
-  //analytics.ready(function(){
-    // Get the current user object
-    //var user = analytics.user();
-    // Get the existing ajs_anonymous_id
-    //var currentId = analytics.user().anonymousId();
-    // Check if it already has the prefix to avoid "cons_cons_..."
-    //if (currentId && !currentId.startsWith('cons_')){
-      // Set the new ID with the prefix
-      //var newId = 'cons_' + currentId;
-      //user.anonymousId(newId);
-  //
-  //    console.log('Updated Anonymous ID to: ', newId);
-  //  }
-  // });
-    // ----------------------------------------------------------
+  // --- START CUSTOM ANONYMOUS ID LOGIC ---
+  
+  // 1. Get the current Anonymous ID (Segment generates one if it doesn't exist)
+  var currentId = analytics.user().anonymousId();
+
+  // 2. Determine the desired prefix based on the URL
+  var targetPrefix = window.location.pathname.startsWith('/business/') ? 'biz_' : 'cons_';
+
+  // 3. Check if the ID is already prefixed to avoid duplication
+  // We only update if the ID does not already start with 'biz_' or 'cons_'
+  var isAlreadyPrefixed = currentId.startsWith('biz_') || currentId.startsWith('cons_');
+
+  if (!isAlreadyPrefixed) {
+    var newId = targetPrefix + currentId;
+    
+    // 4. Update the Anonymous ID
+    analytics.user().anonymousId(newId);
+  }
+  
+  // --- END CUSTOM ANONYMOUS ID LOGIC ---
   analytics.setAnonymousId('cons_ABC-123-XYZ');
   analytics.page();
   }}();
